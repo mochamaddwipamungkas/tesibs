@@ -1,28 +1,29 @@
 import React, { useState } from "react";
 
 const Page = () => {
-  const [inputan, setInputan] = useState("");
+  const [inputan, setInputan] = useState(0);
   const [prima, setPrima] = useState([]);
 
   const handleSubmit = (inputan) => {
-    let x = inputan * 10;
-    let array = [];
-    let bilprima = [];
-    for (let counter = 2; counter <= x; counter++) {
-      var notPrime = false;
-      for (let i = 2; i <= counter; i++) {
-        if (counter % i === 0 && i !== counter) {
-          notPrime = true;
+    if (inputan > 0) {
+      let result = [];
+      for (let i = 2; ; i++) {
+        let prime = true;
+        for (let j = 2; j < i; j++) {
+          if (i !== j && i % j === 0) {
+            prime = false;
+          }
+        }
+        if (prime) {
+          result.push(i);
+        }
+        if (result.length === parseInt(inputan)) {
+          break;
         }
       }
-      if (notPrime === false) {
-        array = [...array, counter];
-      }
-    }
-
-    for (let i = 0; i < inputan; i++) {
-      bilprima = [...bilprima, array[i]];
-      setPrima(bilprima);
+      setPrima(result);
+    } else {
+      setPrima([]);
     }
   };
   return (
@@ -30,8 +31,8 @@ const Page = () => {
       <label>Input </label>
       <input
         type="number"
-        value={inputan}
         onChange={(e) => setInputan(e.target.value)}
+        min={"1"}
       />
       <button
         onClick={() => {
@@ -42,9 +43,13 @@ const Page = () => {
       </button>
       <div>
         <label htmlFor="">Hasil : </label>
-        {prima.map((angka, index) => (
-          <span key={index}>{angka},</span>
-        ))}
+        {prima.map((angka, index) =>
+          index === 0 ? (
+            <span key={index}>{angka}</span>
+          ) : (
+            <span key={index}>, {angka}</span>
+          )
+        )}
       </div>
     </div>
   );
